@@ -61,7 +61,7 @@ test('get numberOfInputs defers to backend', async () => {
 	const ctx = new AudioContext();
 	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
 
-	expect(sln.numberOfInputs).toBe(sln._backend.node.numberOfInputs);
+	expect(sln.numberOfInputs).toBe(sln._backend.audioNode.numberOfInputs);
 });
 
 test('get numberOfOutputs defers to backend', async () => {
@@ -72,7 +72,7 @@ test('get numberOfOutputs defers to backend', async () => {
 	const ctx = new AudioContext();
 	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
 
-	expect(sln.numberOfOutputs).toBe(sln._backend.node.numberOfOutputs);
+	expect(sln.numberOfOutputs).toBe(sln._backend.audioNode.numberOfOutputs);
 });
 
 test('get channelCount defers to backend', async () => {
@@ -83,7 +83,7 @@ test('get channelCount defers to backend', async () => {
 	const ctx = new AudioContext();
 	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
 
-	expect(sln.channelCount).toBe(sln._backend.node.channelCount);
+	expect(sln.channelCount).toBe(sln._backend.audioNode.channelCount);
 });
 
 test('get channelCountMode defers to backend', async () => {
@@ -94,7 +94,7 @@ test('get channelCountMode defers to backend', async () => {
 	const ctx = new AudioContext();
 	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
 
-	expect(sln.channelCountMode).toBe(sln._backend.node.channelCountMode);
+	expect(sln.channelCountMode).toBe(sln._backend.audioNode.channelCountMode);
 });
 
 test('get channelInterpretation defers to backend', async () => {
@@ -105,7 +105,7 @@ test('get channelInterpretation defers to backend', async () => {
 	const ctx = new AudioContext();
 	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
 
-	expect(sln.channelInterpretation).toBe(sln._backend.node.channelInterpretation);
+	expect(sln.channelInterpretation).toBe(sln._backend.audioNode.channelInterpretation);
 });
 
 test('set channelCount sets backend channelCount', async () => {
@@ -118,7 +118,7 @@ test('set channelCount sets backend channelCount', async () => {
 
 	sln.channelCount = 420;
 
-	expect(sln._backend.node.channelCount).toBe(420);
+	expect(sln._backend.audioNode.channelCount).toBe(420);
 });
 
 test('set channelCountMode sets backend channelCountMode', async () => {
@@ -131,7 +131,7 @@ test('set channelCountMode sets backend channelCountMode', async () => {
 
 	sln.channelCountMode = 'max';
 
-	expect(sln._backend.node.channelCountMode).toBe('max');
+	expect(sln._backend.audioNode.channelCountMode).toBe('max');
 });
 
 test('set channelInterpretation sets backend channelInterpretation', async () => {
@@ -144,7 +144,7 @@ test('set channelInterpretation sets backend channelInterpretation', async () =>
 
 	sln.channelInterpretation = 'discrete';
 
-	expect(sln._backend.node.channelInterpretation).toBe('discrete');
+	expect(sln._backend.audioNode.channelInterpretation).toBe('discrete');
 });
 
 test('get silent returns backend.silent value', async () => {
@@ -190,4 +190,35 @@ test('listeners are notified of silence state change', async (done) => {
 	for (let i = 0; i < 100; i++) {
 		sln._backend._processNext(audioProcessingEvent(nChannels, 512, new Float32Array(512)));
 	}
+});
+
+test('connect() passes off to _backend', async () => {
+	const nIns = 2;
+	const nOuts = 2;
+	const nChannels = 2;
+
+	const ctx = new AudioContext();
+
+	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
+	const gain = ctx.createGain();
+
+	const spy = jest.spyOn(sln._backend, 'connect');
+
+	sln.connect(gain);
+
+	expect(spy).toHaveBeenCalledTimes(1);
+});
+
+test('disconnect() passes off to _backend', async () => {
+	const nIns = 2;
+	const nOuts = 2;
+	const nChannels = 2;
+
+	const ctx = new AudioContext();
+	const sln = await createSilenceListenerNode(ctx, nIns, nOuts, nChannels);
+	const spy = jest.spyOn(sln._backend, 'disconnect');
+
+	sln.disconnect();
+
+	expect(spy).toHaveBeenCalledTimes(1);
 });

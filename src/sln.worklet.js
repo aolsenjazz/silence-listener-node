@@ -50,6 +50,8 @@ export default class WorkletProcessor extends AudioWorkletProcessor {
 				this.silent = true;
 			}
 		}
+
+		return true;
 	}
 
 	/**

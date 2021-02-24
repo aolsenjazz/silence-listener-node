@@ -3,14 +3,18 @@ import { AbstractBackend } from './abstract-backend';
 /**
  * Loads the AudioWorkletProcessor, initializes it, then resolves with a new instance of AudioWorkletBackend
  * 
- * @param { AudioContext } context         The parent AudioContext
- * @param { Number }       nChannels       The number of input and output channels
- * @param { String }       pathToWorklet   The location of the AudioWorklet file. Default is 
- *                                         '/audio-feeder.worklet.js'
+ * @param { AudioContext } context          The parent AudioContext
+ * @param { Number }       nIns             The number of inputs. Probably 1
+ * @param { Number }       nOuts            The number of outputs. Probably 1
+ * @param { Number }       nChannels        The number of input and output channels
+ * @param { Number }       silenceThreshold The number of input and output channels
+ * @param { String }       pathToWorklet    The location of the AudioWorklet file. Default is '/sln.worklet.js'
  */
 export function createWorkletBackend(context, nIns, nOuts, nChannels, silenceThreshold, pathToWorklet) {
 	let _silenceThreshold = silenceThreshold;
 	let _nChannels = [];
+	let _nIns = nIns;
+	let _nOuts = nOuts;
 	for (let i = 0; i < nOuts; i++) {
 		_nChannels.push(nChannels);
 	}
@@ -18,9 +22,9 @@ export function createWorkletBackend(context, nIns, nOuts, nChannels, silenceThr
 	// define this here so that window is accessible (SSR-safe)
 	class WorkletNode extends AudioWorkletNode {
 		constructor(context) {
-			super(context, 'FeederNode', {
-				numberOfInputs: nIns, 
-				numberOfOutputs: nOuts,
+			super(context, 'SilenceListenerNode', {
+				numberOfInputs: _nIns, 
+				numberOfOutputs: _nOuts,
 				outputChannelCount: _nChannels
 			});
 		}
@@ -41,7 +45,7 @@ export function createWorkletBackend(context, nIns, nOuts, nChannels, silenceThr
 	});
 }
 
-/** Audio backend which processes audio on the Audio Thread */
+/** Audio backend which processes audio on the Audio Thread. */
 class AudioWorkletBackend extends AbstractBackend {
 
 	/**
@@ -60,7 +64,7 @@ class AudioWorkletBackend extends AbstractBackend {
 	/**
 	 * Loads + intializes the AudioWorkletProcessor, then connects it to the provided destination AudioNode
 	 * 
-	 * @param {AudioNode} destination The node to which FeederNode will connect
+	 * @param {AudioNode} destination The node to which SilenceListenerNode will connect
 	 */
 	connect(destination) {
 		this.audioNode.connect(destination);

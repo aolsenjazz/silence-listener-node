@@ -1,3 +1,4 @@
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 let commonConfig = {
@@ -18,6 +19,16 @@ let commonConfig = {
 		],
 	},
 	mode: 'production',
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					mangle: false
+				}
+			})
+		]
+	}
 }
 
 let workletConfig = Object.assign({}, commonConfig, {

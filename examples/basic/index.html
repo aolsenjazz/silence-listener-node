@@ -1,0 +1,55 @@
+<!-- 
+
+Trivial example of how SilenceListenerNode can be used. In this example, we feed alternating
+white noise/silence for 8 seconds
+
+-->
+<html>
+	<button id="play">Start</button>
+	<p id="msg">State: not playing</p>
+
+	<script src="/dist/silence-listener-node.js"></script>
+	<script>
+		// get dom objects
+		var msg = document.getElementById('msg');
+		var play = document.getElementById('play');
+		
+		play.onclick = async () => {
+			// init some variables
+			var AudioCtx = window.AudioContext || window.webkitAudioContext;
+			var ctx = new AudioCtx({sampleRate: 44100});
+			var nInputs = 1;
+			var nOutputs = 1;
+			var nChannels = 1;
+			var nSeconds = 8;
+
+			// Create (mono) audio data, alternating 1 second white noise, 1 second silence
+			var data = ctx.createBuffer(1, ctx.sampleRate * nSeconds, ctx.sampleRate);
+			var idx = 0;
+			for (var i = 0; i < nSeconds; i++) {
+				let silence = i % 2 !== 0;
+				for (var j = 0; j < ctx.sampleRate; j++) {
+					data.getChannelData(0)[idx++] = silence ? 0 : Math.random()
+				}
+			}
+			var source = ctx.createBufferSource();
+			source.buffer = data;
+
+			// create the SilenceListenerNode
+			let sln = await SilenceListenerNode.createSilenceListenerNode(ctx, nInputs, nOutputs, nChannels, {
+				pathToWorklet: '/dist/sln.worklet.js',
+				silenceThreshold: 1 // one batch of samples
+			});
+			sln.subscribeToSilence((silent, delta) => {
+				msg.innerHTML = 'State: ' + (silent ? 'silent' : 'not silent');
+			});
+
+			// Hook it all up and play
+			source.connect(sln);
+			sln.connect(ctx.destination);
+			source.start();
+			msg.innerHTML = 'State: not silent';
+		}
+
+	</script>
+</html>

@@ -1,12 +1,13 @@
 import { AbstractBackend } from './abstract-backend';
 
+/** Backend which processes audio data using ScriptProcessorNode */
 export class ScriptProcessorBackend extends AbstractBackend {
 
 	constructor(context, batchSize, nInputs, nOutputs, silenceThreshold) {
 		super();
 
-		this.node = context.createScriptProcessor(batchSize, nInputs, nOutputs);
-		this.node.onaudioprocess = this._processNext.bind(this);
+		this.audioNode = context.createScriptProcessor(batchSize, nInputs, nOutputs);
+		this.audioNode.onaudioprocess = this._processNext.bind(this);
 
 		this.silent = false;
 		this.silentRuns = 0;
@@ -19,14 +20,14 @@ export class ScriptProcessorBackend extends AbstractBackend {
 	 * @param {AudioNode} destination The node to which SilenceListenerNode will connect
 	 */
 	connect(destination) {
-		this.node.connect(destination);
+		this.audioNode.connect(destination);
 	}
 
 	/**
 	 * Disconnect from the connected AudioNode
 	 */
 	disconnect() {
-		this.node.disconnect();
+		this.audioNode.disconnect();
 	}
 
 	/**

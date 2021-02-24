@@ -42,7 +42,7 @@ test('connect() calls node.connect()', async () => {
 	const ctx = new AudioContext();
 	const spb = new ScriptProcessorBackend(ctx, batchSize, nIns, nOuts);
 	const destination = await createSilenceListenerNode(ctx, nIns, nOuts, batchSize);
-	const spy = jest.spyOn(spb.node, 'connect');
+	const spy = jest.spyOn(spb.audioNode, 'connect');
 
 	spb.connect(destination);
 
@@ -56,7 +56,7 @@ test('disconnect() calls node.disconnect()', () => {
 
 	const ctx = new AudioContext();
 	const spb = new ScriptProcessorBackend(ctx, batchSize, nIns, nOuts);
-	const spy = jest.spyOn(spb.node, 'disconnect');
+	const spy = jest.spyOn(spb.audioNode, 'disconnect');
 
 
 	spb.disconnect();

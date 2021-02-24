@@ -1,12 +1,15 @@
 {
   "name": "silence-listener-node",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Pseudo-AudioNode to notify when an audio stream becomes silent.",
-  "main": "index.js",
+  "main": "./dist/silence-listener-node.js",
   "scripts": {
-    "start": "npx webpack",
+    "build": "npx webpack",
+    "watch-react-example": "cd examples/react && npx webpack --watch",
     "watch": "npx webpack --watch",
-    "test": "jest"
+    "examples": "http-server",
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -35,6 +38,7 @@
     ]
   },
   "homepage": "https://github.com/aolsenjazz/silence-listener-node#readme",
+  "repository": "https://github.com/aolsenjazz/silence-listener-node",
   "devDependencies": {
     "@babel/core": "^7.12.17",
     "@babel/plugin-transform-runtime": "^7.12.17",
@@ -42,7 +46,9 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "http-server": "^0.12.3",
     "jest": "^26.6.3",
+    "terser-webpack-plugin": "^5.1.1",
     "web-audio-test-api": "^0.5.2",
     "webpack": "^5.23.0",
     "webpack-cli": "^4.5.0"

@@ -1,4 +1,4 @@
-/** Abstract class representing an Audio Backend. Either ScriptProcessorNode or AudioWorklet */
+/** Abstract class representing an Audio Backend. Either ScriptProcessorNode or AudioWorklet under the hood */
 export class AbstractBackend {
 
 	constructor() {

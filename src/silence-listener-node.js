@@ -11,13 +11,34 @@ export class SilenceListenerNode {
 		this.lastStateChangeTime = Date.now();
 	}
 
+	/**
+	 * Invoked by the backend whenever the audio becomes or unbecomes silent
+	 *
+	 * @param { boolean } silent
+	 */
 	onSilenceStateChange(silent) {
 		let timeSinceLastStateChange = Date.now() - this.lastStateChangeTime;
 		this.lastStateChangeTime = Date.now();
 
 		this._subscriptions.forEach((value, key) => {
-			value(silent, key);
+			value(silent, timeSinceLastStateChange);
 		});
+	}
+
+	/**
+	 * Connects the backend to the given destination AudioNode
+	 * 
+	 * @param {AudioNode} destination The node to which SilenceListenerNode will connect
+	 */
+	connect(node) {
+		this._backend.connect(node);
+	}
+
+	/**
+	 * Disconnect from the connected AudioNode
+	 */
+	disconnect() {
+		this._backend.disconnect();
 	}
 
 	/**
@@ -31,6 +52,11 @@ export class SilenceListenerNode {
 		return id;
 	}
 
+	/**
+	 * Stop receiving silence events for given ID.
+	 * 
+	 * @param { String } id Identifier for callback subscription
+	 */
 	unsubscribeFromSilence(id) {
 		this._subscriptions.delete(id);
 	}
@@ -39,16 +65,16 @@ export class SilenceListenerNode {
 	get _isSilenceListenerNode() { return true; }
 
 	/** AudioNode-compliant getters. All defer to underlying AudioNode */
-	get numberOfInputs()        { return this._backend.node.numberOfInputs; }
-	get numberOfOutputs()       { return this._backend.node.numberOfOutputs; }
-	get channelCount()          { return this._backend.node.channelCount; }
-	get channelCountMode()      { return this._backend.node.channelCountMode; }
-	get channelInterpretation() { return this._backend.node.channelInterpretation; }
+	get numberOfInputs()        { return this._backend.audioNode.numberOfInputs; }
+	get numberOfOutputs()       { return this._backend.audioNode.numberOfOutputs; }
+	get channelCount()          { return this._backend.audioNode.channelCount; }
+	get channelCountMode()      { return this._backend.audioNode.channelCountMode; }
+	get channelInterpretation() { return this._backend.audioNode.channelInterpretation; }
 
 	/** AudioNode-compliant setters. All defer to underlying AudioNode */
-	set channelCount(channelCount)                   { this._backend.node.channelCount = channelCount; }
-	set channelCountMode(channelCountMode)           { this._backend.node.channelCountMode = channelCountMode; }
-	set channelInterpretation(channelInterpretation) { this._backend.node.channelInterpretation = channelInterpretation }
+	set channelCount(channelCount)                   { this._backend.audioNode.channelCount = channelCount; }
+	set channelCountMode(channelCountMode)           { this._backend.audioNode.channelCountMode = channelCountMode; }
+	set channelInterpretation(channelInterpretation) { this._backend.audioNode.channelInterpretation = channelInterpretation }
 
 	/** Allow queryable state */
 	get silent()  { return this._backend.silent; }
