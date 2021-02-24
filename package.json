@@ -8,13 +8,10 @@
     "watch-react-example": "cd examples/react && npx webpack --watch",
     "watch": "npx webpack --watch",
     "examples": "http-server",
-    "test": "jest",
-    "coverage": "jest --coverage"
+    "test": "jest --coverage",
+    "test:coverage": "node ./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aolsenjazz/silence-listener-node.git"
-  },
+  "repository": "https://github.com/aolsenjazz/silence-listener-node",
   "keywords": [
     "DSP",
     "audio",
@@ -38,7 +35,6 @@
     ]
   },
   "homepage": "https://github.com/aolsenjazz/silence-listener-node#readme",
-  "repository": "https://github.com/aolsenjazz/silence-listener-node",
   "devDependencies": {
     "@babel/core": "^7.12.17",
     "@babel/plugin-transform-runtime": "^7.12.17",
@@ -46,6 +42,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "coveralls": "^3.1.0",
     "http-server": "^0.12.3",
     "jest": "^26.6.3",
     "terser-webpack-plugin": "^5.1.1",
