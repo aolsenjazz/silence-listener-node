@@ -16,7 +16,7 @@ To utilize AudioWorklet functionality, you **must** copy the `sln.worklet.js` fi
 
 ```javascript
 createSilenceListenerNode(context, nChannels, { 
-	pathToWorklet: '/some/path/to/sln.worklet.js', // default '/sln.worklet.js'
+    pathToWorklet: '/some/path/to/sln.worklet.js', // default '/sln.worklet.js'
 });
 ```
 See **Configuration** for more instructions on using the `options` dict.
@@ -33,28 +33,28 @@ let options   = {}; // see **Configuration**
 let buffSource = context.createBufferSource();
 
 createSilenceListenerNode(context, nChannels, options)
-	.then((silenceListenerNode) => {
-		buffSource.connect(silenceListenerNode);
-		silenceListenerNode.connect(context.destination);
-		buffSource.start();
-	});
+    .then((silenceListenerNode) => {
+        buffSource.connect(silenceListenerNode);
+        silenceListenerNode.connect(context.destination);
+        buffSource.start();
+    });
 ```
 or
 ```javascript
 const createSilenceListenerNode = require('@alexanderolsen/silence-listener-node').createSilenceListenerNode; 
 
 (async function() {
-	let context   = new AudioContext();
-	let nChannels = 2;
-	let options   = {}; // see **Configuration**
-	
-	let buffSource = context.createBufferSource();
-	let silenceListenerNode = await createSilenceListenerNode(context, nChannels, options);
-	
-	buffSource.connect(silenceListenerNode);
-	silenceListenerNode.connect(context.destination);
-	
-	buffSource.start();
+    let context   = new AudioContext();
+    let nChannels = 2;
+    let options   = {}; // see **Configuration**
+    
+    let buffSource = context.createBufferSource();
+    let silenceListenerNode = await createSilenceListenerNode(context, nChannels, options);
+    
+    buffSource.connect(silenceListenerNode);
+    silenceListenerNode.connect(context.destination);
+    
+    buffSource.start();
 })();
 ```
 
@@ -62,17 +62,17 @@ const createSilenceListenerNode = require('@alexanderolsen/silence-listener-node
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@alexanderolsen/silence-listener-node"></script>
 <script>
-	var context   = new AudioContext();
-	var nChannels = 2;
-	var options   = {}; // see **Configuration**
-	let buffSource = context.createBufferSource();
+    var context   = new AudioContext();
+    var nChannels = 2;
+    var options   = {}; // see **Configuration**
+    let buffSource = context.createBufferSource();
 
-	SilenceListenerNode.createSilenceListenerNode(context, nChannels, options)
-		.then((silenceListenerNode) => {
-			buffSource.connect(silenceListenerNode);
-			silenceListenerNode.connect(context.destination);
-			buffSource.start();
-		});
+    SilenceListenerNode.createSilenceListenerNode(context, nChannels, options)
+        .then((silenceListenerNode) => {
+            buffSource.connect(silenceListenerNode);
+            silenceListenerNode.connect(context.destination);
+            buffSource.start();
+        });
 </script>
 ```
 Or use the silence-listener-node.js file in the *dist* folder:
@@ -90,13 +90,13 @@ let nChannels = 2;
 
 // entries are defaults
 let options = {
-	nInputs:   1,   // The number of inputs connected to this node. Probably 1
- 	nOutputs:  1,   // The number of outputs connected to this node. Probably 1
-	batchSize: 512, // Stuck at 128 for `AudioWorklet`s. Can be powers of 2 where 256 < batchSize < 16384
-	
-	silenceThreshold: Math.floor(44100 / batchSize), // This is the number of silent batches which must
+    nInputs:   1,   // The number of inputs connected to this node. Probably 1
+    nOutputs:  1,   // The number of outputs connected to this node. Probably 1
+    batchSize: 512, // Stuck at 128 for `AudioWorklet`s. Can be powers of 2 where 256 < batchSize < 16384
+    
+    silenceThreshold: Math.floor(44100 / batchSize), // This is the number of silent batches which must
                                                      // occur before silence callbacks are invoked.
- 	pathToWorklet: '/sln.worklet.js' //The path to the worklet file
+    pathToWorklet: '/sln.worklet.js' //The path to the worklet file
 }
 
 createSilenceListenerNode(context, nChannels, options).then((silenceListenerNode) => { ... });
