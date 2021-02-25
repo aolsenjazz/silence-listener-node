@@ -19,23 +19,14 @@ let commonConfig = {
 		],
 	},
 	mode: 'production',
-	optimization: {
-		minimize: true,
-		minimizer: [
-			new TerserPlugin({
-				terserOptions: {
-					mangle: false
-				}
-			})
-		]
-	}
 }
 
 let workletConfig = Object.assign({}, commonConfig, {
 	entry: './src/sln.worklet.js',
 	output: {
 		filename: 'sln.worklet.js',
-		path: path.resolve(__dirname, 'dist')
+		path: path.resolve(__dirname, 'dist'),
+		globalObject: 'this'
 	},
 });
 
