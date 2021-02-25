@@ -2,7 +2,7 @@
 
 ![AppVeyor](https://img.shields.io/appveyor/build/aolsenjazz/silence-listener-node)    [![Coverage Status](https://coveralls.io/repos/github/aolsenjazz/silence-listener-node/badge.svg?branch=main)](https://coveralls.io/github/aolsenjazz/silence-listener-node?branch=main) [![Maintainability](https://api.codeclimate.com/v1/badges/1b47d3d0a92f4def2455/maintainability)](https://codeclimate.com/github/aolsenjazz/silence-listener-node/maintainability) ![Depfu](https://img.shields.io/depfu/aolsenjazz/silence-listener-node)
 
-SilenceListenerNode is a [pseudo](https://github.com/WebAudio/web-audio-api/issues/251)-[AudioNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) which invokes a callback function whenever a stream of audio becomes or unbecomes silent. Uses [AudioWorklet](https://developers.google.com/web/updates/2017/12/audio-worklet) when available, falling back to [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) when not Worklets are not available. 
+SilenceListenerNode is a [pseudo](https://github.com/WebAudio/web-audio-api/issues/251)-[AudioNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) which invokes a callback function whenever a stream of audio becomes or unbecomes silent. Uses [AudioWorklet](https://developers.google.com/web/updates/2017/12/audio-worklet) when available, falling back to [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) when Worklets are not available. 
 
 ## Installation
 
@@ -15,7 +15,7 @@ npm i @alexanderolsen/silence-listener-node
 To utilize AudioWorklet functionality, you **must** copy the `sln.worklet.js` file in */node_modules/@alexanderolsen/silence-listener-node/dist/* to where the library can find it. The default location for this file is at the server root (*/sln.worklet.js*). This location can be changed using the options dict passed into `createSilenceListenerNode()`:
 
 ```javascript
-createSilenceListenerNode(context, nInputs, nOutputs, nChannels, { 
+createSilenceListenerNode(context, nChannels, { 
 	pathToWorklet: '/some/path/to/sln.worklet.js', // default '/sln.worklet.js'
 });
 ```
@@ -139,14 +139,23 @@ disconnect() { ... }
 
 ### `subscribeToSilence`
 ```javascript
-/** Disconnects from the currently-connected AudioNode */
-disconnect() { ... }
+/**
+ * Begin receiving silence notifications
+ *
+ * @param  { Function(isSilent, timeSinceLast) } callback Invoked whenever audio becomes or unbecomes silent
+ * @return { String } id of the subscription. use with unsubscribeFromSilence(id) to stop receiving notifications
+ */
+subscribeToSilence(callback) { ... }
 ```
 
 ### `unsubscribeFromSilence`
 ```javascript
-/** Disconnects from the currently-connected AudioNode */
-disconnect() { ... }
+/**
+ * Stop receiving silence events for given ID.
+ * 
+ * @param { String } id Identifier for callback subscription
+ */
+unsubscribeFromSilence(id) { ... }
 ```
 
 ### `getters`
