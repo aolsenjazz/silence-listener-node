@@ -35,13 +35,14 @@ beforeAll(() => {
 });
 
 test('connect() calls node.connect()', async () => {
+	const nChannels = 2;
 	const batchSize = 512;
-	const nIns = 2;
-	const nOuts = 2;
+	const nIns = 1;
+	const nOuts = 1;
 
 	const ctx = new AudioContext();
 	const spb = new ScriptProcessorBackend(ctx, batchSize, nIns, nOuts);
-	const destination = await createSilenceListenerNode(ctx, nIns, nOuts, batchSize);
+	const destination = await createSilenceListenerNode(ctx, nChannels);
 	const spy = jest.spyOn(spb.audioNode, 'connect');
 
 	spb.connect(destination);

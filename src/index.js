@@ -28,6 +28,8 @@ export function polyfill() {
  * the following format:
  *
  * options: {
+ *     nInputs:          { Number } The number of inputs connected to this node. Probably 1
+ *     nOutputs:         { Number } The number of outputs connected to this node. Probably 1
  *     batchSize:        { Number } default 512. Number of samples (per channel) processed per batch. Only in-use
  *                                  when using ScriptProcessorBackend
  *     silenceThreshold: { Number } default Math.floor(44100 / batchSize). This is the number of silent batches
@@ -36,14 +38,14 @@ export function polyfill() {
  * }
  *
  * @param { AudioContext } context Parent AudioContext
- * @param { Number } nInputs The number of inputs connected to this node. Probably 1
- * @param { Number } nOutputs The number of outputs connected to this node. Probably 1
  * @param { Number } nChannels The number of channels per input/outputs
  * @param { Object } options See above
  * 
  * @return { Promise } resolves with a new instance of SilenceListenerNode
  */
-export async function createSilenceListenerNode(context, nInputs, nOutputs, nChannels, options={}) {
+export async function createSilenceListenerNode(context, nChannels, options={}) {
+	let nInputs = options.nInputs || 1;
+	let nOutputs = options.nOutputs || 1;
 	let batchSize = options.batchSize || 512;
 	let silenceThreshold = options.silenceThreshold || Math.floor(44100 / batchSize);
 	let pathToWorklet = options.pathToWorklet || '/sln.worklet.js';

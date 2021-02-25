@@ -18,8 +18,6 @@ white noise/silence for 8 seconds
 			// init some variables
 			var AudioCtx = window.AudioContext || window.webkitAudioContext;
 			var ctx = new AudioCtx({sampleRate: 44100});
-			var nInputs = 1;
-			var nOutputs = 1;
 			var nChannels = 1;
 			var nSeconds = 8;
 
@@ -36,7 +34,7 @@ white noise/silence for 8 seconds
 			source.buffer = data;
 
 			// create the SilenceListenerNode
-			let sln = await SilenceListenerNode.createSilenceListenerNode(ctx, nInputs, nOutputs, nChannels, {
+			let sln = await SilenceListenerNode.createSilenceListenerNode(ctx, nChannels, {
 				pathToWorklet: '/dist/sln.worklet.js',
 				silenceThreshold: 1 // one batch of samples
 			});

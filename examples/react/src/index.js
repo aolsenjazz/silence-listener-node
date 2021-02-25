@@ -10,8 +10,6 @@ import { useState, useEffect, useCallback } from 'react';
 function App() {
 	const [msg, setMsg] = useState('State: not playing');
 
-	const [nInputs, setNInputs]     = useState(1);
-	const [nOutputs, setNOutputs]   = useState(1);
 	const [nChannels, setNChannels] = useState(1);
 	const [nSeconds, setNSeconds]   = useState(8);
 	
@@ -33,7 +31,7 @@ function App() {
 		source.buffer = data;
 
 		// create the SilenceListenerNode
-		createSilenceListenerNode(ctx, nInputs, nOutputs, nChannels, {
+		createSilenceListenerNode(ctx, nChannels, {
 			pathToWorklet: '/dist/sln.worklet.js',
 			silenceThreshold: 1 // one batch of samples
 		}).then(sln => {
