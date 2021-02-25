@@ -1,6 +1,6 @@
 {
   "name": "silence-listener-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pseudo-AudioNode to notify when an audio stream becomes silent.",
   "main": "./dist/silence-listener-node.js",
   "scripts": {
