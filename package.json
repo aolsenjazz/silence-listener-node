@@ -48,9 +48,9 @@
   },
   "homepage": "https://github.com/aolsenjazz/silence-listener-node#readme",
   "devDependencies": {
-    "@babel/core": "^7.12.17",
-    "@babel/plugin-transform-runtime": "^7.12.17",
-    "@babel/preset-env": "^7.12.17",
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -64,7 +64,7 @@
     "jest": "^26.6.3",
     "terser-webpack-plugin": "^5.1.1",
     "web-audio-test-api": "^0.5.2",
-    "webpack": "^5.23.0",
+    "webpack": "^5.26.3",
     "webpack-cli": "^4.5.0"
   }
 }
