@@ -1,8 +1,8 @@
-import { AbstractBackend } from './abstract-backend';
+import { AbstractBackend } from "./abstract-backend";
 
 /**
  * Loads the AudioWorkletProcessor, initializes it, then resolves with a new instance of AudioWorkletBackend
- * 
+ *
  * @param { AudioContext } context          The parent AudioContext
  * @param { Number }       nIns             The number of inputs. Probably 1
  * @param { Number }       nOuts            The number of outputs. Probably 1
@@ -10,7 +10,14 @@ import { AbstractBackend } from './abstract-backend';
  * @param { Number }       silenceThreshold The number of input and output channels
  * @param { String }       pathToWorklet    The location of the AudioWorklet file. Default is '/sln.worklet.js'
  */
-export function createWorkletBackend(context, nIns, nOuts, nChannels, silenceThreshold, pathToWorklet) {
+export function createWorkletBackend(
+	context,
+	nIns,
+	nOuts,
+	nChannels,
+	silenceThreshold,
+	pathToWorklet
+) {
 	let _silenceThreshold = silenceThreshold;
 	let _nChannels = [];
 	let _nIns = nIns;
@@ -22,35 +29,33 @@ export function createWorkletBackend(context, nIns, nOuts, nChannels, silenceThr
 	// define this here so that window is accessible (SSR-safe)
 	class WorkletNode extends AudioWorkletNode {
 		constructor(context) {
-			super(context, 'SilenceListenerNode', {
-				numberOfInputs: _nIns, 
+			super(context, "SilenceListenerNode", {
+				numberOfInputs: _nIns,
 				numberOfOutputs: _nOuts,
-				outputChannelCount: _nChannels
+				outputChannelCount: _nChannels,
 			});
 		}
 	}
 
-	return new Promise((resolve, reject) => {
-		context.audioWorklet.addModule(pathToWorklet)
-			.then(() => {
-				let workletNode = new WorkletNode(context);
-				workletNode.port.postMessage({
-					command: 'init', 
-					silenceThreshold: _silenceThreshold
-				});
-
-				let backend = new AudioWorkletBackend(workletNode);
-				resolve(backend);
+	return new Promise((resolve) => {
+		context.audioWorklet.addModule(pathToWorklet).then(() => {
+			let workletNode = new WorkletNode(context);
+			workletNode.port.postMessage({
+				command: "init",
+				silenceThreshold: _silenceThreshold,
 			});
+
+			let backend = new AudioWorkletBackend(workletNode);
+			resolve(backend);
+		});
 	});
 }
 
 /** Audio backend which processes audio on the Audio Thread. */
 class AudioWorkletBackend extends AbstractBackend {
-
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param { AudioNode }    audioNode    The initialized AudioWorkletProcessor
 	 */
 	constructor(audioNode) {
@@ -63,7 +68,7 @@ class AudioWorkletBackend extends AbstractBackend {
 
 	/**
 	 * Loads + intializes the AudioWorkletProcessor, then connects it to the provided destination AudioNode
-	 * 
+	 *
 	 * @param {AudioNode} destination The node to which SilenceListenerNode will connect
 	 */
 	connect(destination) {
@@ -79,11 +84,11 @@ class AudioWorkletBackend extends AbstractBackend {
 
 	/**
 	 * Called whenever a message from the AudioWorkletProcessor is received
-	 * 
+	 *
 	 * @param {Event} e https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
 	 */
 	_onMessage(e) {
-		if (e.data.command === 'stateChange') {
+		if (e.data.command === "stateChange") {
 			this.silenceCallback(e.data.silent);
 		} else {
 			throw `command ${e.data.command} unrecognized`;

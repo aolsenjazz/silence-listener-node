@@ -34,6 +34,18 @@
       "src/*.js"
     ]
   },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "rules": {}
+  },
   "homepage": "https://github.com/aolsenjazz/silence-listener-node#readme",
   "devDependencies": {
     "@babel/core": "^7.13.10",
@@ -43,6 +55,11 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "coveralls": "^3.1.0",
+    "eslint": "^7.22.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
     "http-server": "^0.12.3",
     "jest": "^26.6.3",
     "terser-webpack-plugin": "^5.1.1",

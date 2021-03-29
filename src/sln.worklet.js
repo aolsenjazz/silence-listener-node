@@ -2,7 +2,6 @@ const BUFFER_SIZE = 128;
 
 /** AudioWorkletProcessor loaded by audio-worklet-backend to do the audio-thread processing */
 export default class WorkletProcessor extends AudioWorkletProcessor {
-
 	constructor() {
 		super();
 
@@ -20,7 +19,7 @@ export default class WorkletProcessor extends AudioWorkletProcessor {
 	 * @param {Array} outputs     An array containing this.nChannels Float32Arrays
 	 * @param {Object} parameters Object containing audio parameters. unused
 	 */
-	process(inputs, outputs, parameters) {
+	process(inputs, outputs) {
 		let silent = true;
 
 		// copy ins to outs (gross)
@@ -39,14 +38,14 @@ export default class WorkletProcessor extends AudioWorkletProcessor {
 
 		if (this.silent && !silent) {
 			// moving from silent state to non-silent state
-			this.port.postMessage({ command: 'stateChange', silent: silent });
+			this.port.postMessage({ command: "stateChange", silent: silent });
 			this.silentRuns = 0;
 			this.silent = false;
 		} else if (!this.silent && silent) {
 			// increment # of silent runs, notify once it hits threshold
 			this.silentRuns++;
 			if (this.silentRuns === this.silenceThreshold) {
-				this.port.postMessage({ command: 'stateChange', silent: silent });
+				this.port.postMessage({ command: "stateChange", silent: silent });
 				this.silent = true;
 			}
 		}
@@ -62,7 +61,7 @@ export default class WorkletProcessor extends AudioWorkletProcessor {
 	 */
 	_onMessage(e) {
 		switch (e.data.command) {
-			case 'init':
+			case "init":
 				this.silenceThreshold = e.data.silenceThreshold;
 				break;
 			default:
@@ -71,4 +70,4 @@ export default class WorkletProcessor extends AudioWorkletProcessor {
 	}
 }
 
-registerProcessor('SilenceListenerNode', WorkletProcessor);
+registerProcessor("SilenceListenerNode", WorkletProcessor);
