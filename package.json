@@ -64,7 +64,7 @@
     "jest": "^26.6.3",
     "terser-webpack-plugin": "^5.2.4",
     "web-audio-test-api": "^0.5.2",
-    "webpack": "^5.59.1",
+    "webpack": "^5.60.0",
     "webpack-cli": "^4.9.1"
   }
 }
