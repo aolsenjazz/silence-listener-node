@@ -62,7 +62,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "http-server": "^0.12.3",
     "jest": "^26.6.3",
-    "terser-webpack-plugin": "^5.3.5",
+    "terser-webpack-plugin": "^5.3.6",
     "web-audio-test-api": "^0.5.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
